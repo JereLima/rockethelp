@@ -39,7 +39,7 @@ const Login: React.FC = () => {
           }
           secureTextEntry={true}
         />
-        <Button title="Entrar" />
+        <Button title="Entrar"/>
       </VStack>
     </Box>
   );
