@@ -10,9 +10,10 @@ import {
 } from "native-base";
 import { Logo_Secondary } from "../../../assets";
 import { SignOut } from "phosphor-react-native";
-import { color } from "native-base/lib/typescript/theme/styled-system";
-import { Button, Filter, Order } from "../../../components";
+import { Button, Filter, ListEmpty, Order } from "../../../components";
 import { Alert } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { HomeProps } from "../../../routes";
 
 interface OrdersType {
   id: string;
@@ -20,7 +21,7 @@ interface OrdersType {
   when: string;
   status: "open" | "closed";
 }
-const Home: React.FC = () => {
+const Home = ({ navigation }: HomeProps) => {
   const { colors } = useTheme();
   const [statusSelected, setStatusSelected] = useState<"open" | "closed">(
     "open"
@@ -53,6 +54,14 @@ const Home: React.FC = () => {
     },
   ];
 
+  const handleNewOrder = () => {
+    navigation.navigate("Register");
+  };
+
+  const handleNavigationOderDetails = (orderId: string) => {
+    navigation.navigate("Details", { orderId: orderId });
+  };
+
   return (
     <VStack flex={1} safeArea bgColor="gray.600">
       <HStack
@@ -70,8 +79,8 @@ const Home: React.FC = () => {
         <Text color="gray.100">05</Text>
       </HStack>
 
-      <VStack flex={1} bg="gray.700" padding={2}>
-        <HStack justifyContent="space-between" space={2}>
+      <VStack flex={1} bg="gray.700">
+        <HStack justifyContent="space-between" space={4} p={4}>
           <Filter
             title="Em andamento"
             type={"open"}
@@ -86,12 +95,27 @@ const Home: React.FC = () => {
           />
         </HStack>
         <FlatList
-          data={orders}
+          px={4}
+          data={orders.filter(order => order.status === statusSelected)}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <Order data={item} onPress={() => Alert.alert("Hjhsjhsjh")} />
+            <Order
+              data={item}
+              onPress={() => handleNavigationOderDetails(item.id)}
+            />
           )}
+          contentContainerStyle={{ paddingBottom: 100 }}
+          ListEmptyComponent={
+            <ListEmpty
+              text={
+                statusSelected === "open"
+                  ? "Você não possui solicitações\nEm Andamento"
+                  : "Voce não possui solicitações\nFechadas"
+              }
+            />
+          }
         />
+        <Button title="Nova Solicitação" rounded={0} onPress={handleNewOrder} />
       </VStack>
     </VStack>
   );

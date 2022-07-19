@@ -28,7 +28,7 @@ const Order = ({ data, ...rest }: Props) => {
   const statusColor =
     data.status === "open" ? colors.secondary[700] : colors.green[300];
   return (
-    <Pressable {...rest}>
+    <Pressable {...rest} my={1}>
       <HStack
         bg="gray.600"
         alignItems="center"
@@ -37,7 +37,7 @@ const Order = ({ data, ...rest }: Props) => {
         overflow="hidden"
         mt={2}
       >
-        <Box h="full" w={2} bg={statusColor} />
+        <Box h="full" w={3} bg={statusColor} />
         <VStack flex={1} space="2" p={4}>
           <Text color="gray.100" fontSize="md">
             N° do Patrimônio {data.patrimony}

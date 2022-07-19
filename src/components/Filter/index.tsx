@@ -21,7 +21,7 @@ const Filter = ({ isActive, type, title, ...rest }: Props) => {
     >
       <Text
         textTransform="uppercase"
-        fontSize="xs"
+        fontSize="md"
         color={isActive ? colorType : "gray.100"}
       >
         {title}

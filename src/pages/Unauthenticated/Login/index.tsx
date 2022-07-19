@@ -11,7 +11,7 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   return (
-    <Box safeArea flex={1} backgroundColor="primary.700">
+    <Box safeArea flex={1} backgroundColor="primary.600">
       <Loading isOpen={loading} />
       <VStack alignItems="center" flex={1} bg="gray.600" px={8} pt={20}>
         <Logo />

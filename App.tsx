@@ -1,6 +1,6 @@
 import React from "react";
 import { NativeBaseProvider, Box, StatusBar } from "native-base";
-import { Home, Login } from "./src/pages";
+import { Home, Login, Details, Register } from "./src/pages";
 
 import {
   useFonts,
@@ -10,6 +10,7 @@ import {
 
 import { THEME } from "./src/styles/theme";
 import { Loading } from "./src/components";
+import AppRoutes from "./src/routes";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -20,7 +21,7 @@ export default function App() {
   return (
     <NativeBaseProvider theme={THEME}>
       <StatusBar translucent barStyle="light-content" />
-      {fontsLoaded ? <Home /> : <Loading />}
+      {fontsLoaded ? <AppRoutes /> : <Loading />}
     </NativeBaseProvider>
   );
 }
