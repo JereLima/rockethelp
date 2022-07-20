@@ -8,6 +8,7 @@ import {
   NativeStackScreenProps,
 } from "@react-navigation/native-stack";
 import { Details, Home, Login, Register } from "../pages";
+import { userStore } from "../store";
 
 export type RootStackParamList = {
   Login: undefined;
@@ -29,24 +30,21 @@ export type DetailsProps = NativeStackScreenProps<
 
 const { Screen, Navigator } = createNativeStackNavigator<RootStackParamList>();
 
-const logged = true;
+const { user } = userStore.getState();
+console.log("navigation", user);
 
-function AppRoutes() {
-  const authorized = (
-    <Navigator screenOptions={{ headerShown: false }}>
-      <Screen name="Home" component={Home} />
-      <Screen name="Register" component={Register} />
-      <Screen name="Details" component={Details} />
-    </Navigator>
-  );
+const AuthorizedRoutes = (
+  <Navigator screenOptions={{ headerShown: false }}>
+    <Screen name="Home" component={Home} />
+    <Screen name="Register" component={Register} />
+    <Screen name="Details" component={Details} />
+  </Navigator>
+);
 
-  const unauthorized = (
-    <Navigator screenOptions={{ headerShown: false }}>
-      <Screen name="Login" component={Login} />
-    </Navigator>
-  );
+const UnauthorizedRoutes = (
+  <Navigator screenOptions={{ headerShown: false }}>
+    <Screen name="Login" component={Login} />
+  </Navigator>
+);
 
-  return <NavigationContainer>{authorized}</NavigationContainer>;
-}
-
-export default AppRoutes;
+export { AuthorizedRoutes, UnauthorizedRoutes };

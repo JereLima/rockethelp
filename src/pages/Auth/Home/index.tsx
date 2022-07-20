@@ -14,6 +14,7 @@ import { Button, Filter, ListEmpty, Order } from "../../../components";
 import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { HomeProps } from "../../../routes";
+import { userStore } from "../../../store";
 
 interface OrdersType {
   id: string;
@@ -23,6 +24,7 @@ interface OrdersType {
 }
 const Home = ({ navigation }: HomeProps) => {
   const { colors } = useTheme();
+  const { setUser, user, cleanUser } = userStore((state) => state);
   const [statusSelected, setStatusSelected] = useState<"open" | "closed">(
     "open"
   );
@@ -62,6 +64,11 @@ const Home = ({ navigation }: HomeProps) => {
     navigation.navigate("Details", { orderId: orderId });
   };
 
+  const handleLogout = () => {
+    console.log('aaa')
+    cleanUser();
+  };
+
   return (
     <VStack flex={1} safeArea bgColor="gray.600">
       <HStack
@@ -71,7 +78,10 @@ const Home = ({ navigation }: HomeProps) => {
         alignItems="center"
       >
         <Logo_Secondary />
-        <IconButton icon={<SignOut color={colors.gray[100]} size={25} />} />
+        <IconButton
+          icon={<SignOut color={colors.gray[100]} size={25} />}
+          onPress={handleLogout}
+        />
       </HStack>
 
       <HStack p={4} alignItems="center" justifyContent="space-between">
@@ -96,7 +106,7 @@ const Home = ({ navigation }: HomeProps) => {
         </HStack>
         <FlatList
           px={4}
-          data={orders.filter(order => order.status === statusSelected)}
+          data={orders.filter((order) => order.status === statusSelected)}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <Order
