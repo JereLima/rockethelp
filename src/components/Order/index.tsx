@@ -11,16 +11,11 @@ import {
   Button,
 } from "native-base";
 import { Clock, CircleWavyCheck, Hourglass } from "phosphor-react-native";
-
-interface OrderProps {
-  id: string;
-  patrimony: string;
-  when: string;
-  status: "open" | "closed";
-}
+import { OrderDTO } from "../../dtos/Orders";
+import moment from "moment";
 
 export interface Props extends IPressableProps {
-  data: OrderProps;
+  data: OrderDTO;
 }
 
 const Order = ({ data, ...rest }: Props) => {
@@ -45,7 +40,7 @@ const Order = ({ data, ...rest }: Props) => {
           <HStack space={2} alignItems="center">
             <Clock color={colors.gray[100]} size={25} />
             <Text color="gray.100" fontSize="sm">
-              {data.when}
+              {moment(data.when).format("DD/MM/YYYY hh:mm")}
             </Text>
           </HStack>
         </VStack>
@@ -62,4 +57,3 @@ const Order = ({ data, ...rest }: Props) => {
 };
 
 export default Order;
-        

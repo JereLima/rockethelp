@@ -7,14 +7,23 @@ import {
   Text,
   Heading,
   FlatList,
+  Spinner,
 } from "native-base";
 import { Logo_Secondary } from "../../../assets";
 import { SignOut } from "phosphor-react-native";
 import { Button, Filter, ListEmpty, Order } from "../../../components";
 import { Alert } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import {
+  useFocusEffect,
+  useIsFocused,
+  useNavigation,
+} from "@react-navigation/native";
 import { HomeProps } from "../../../routes";
-import { userStore } from "../../../store";
+import { ordersStore, userStore } from "../../../store";
+import { createOrder, getOrders } from "../../../firestore";
+import { OrderDTO } from "../../../dtos/Orders";
+import { useEffect } from "react";
+import { useCallback } from "react";
 
 interface OrdersType {
   id: string;
@@ -24,37 +33,15 @@ interface OrdersType {
 }
 const Home = ({ navigation }: HomeProps) => {
   const { colors } = useTheme();
-  const { setUser, user, cleanUser } = userStore((state) => state);
+  const isFocused = useIsFocused();
+
+  const { user, setUser, cleanUser } = userStore((state) => state);
+  const { orders, setOrders, cleanOrders } = ordersStore((state) => state);
+  const [loading, setLoading] = useState(true);
+
   const [statusSelected, setStatusSelected] = useState<"open" | "closed">(
     "open"
   );
-
-  const orders: OrdersType[] = [
-    {
-      id: "123",
-      patrimony: "445118",
-      when: "18/07/2022 às 10:00",
-      status: "open",
-    },
-    {
-      id: "1234",
-      patrimony: "445118",
-      when: "18/07/2022 às 10:00",
-      status: "open",
-    },
-    {
-      id: "1235",
-      patrimony: "445118",
-      when: "18/07/2022 às 10:00",
-      status: "closed",
-    },
-    {
-      id: "12350",
-      patrimony: "445118",
-      when: "18/07/2022 às 10:00",
-      status: "closed",
-    },
-  ];
 
   const handleNewOrder = () => {
     navigation.navigate("Register");
@@ -65,9 +52,25 @@ const Home = ({ navigation }: HomeProps) => {
   };
 
   const handleLogout = () => {
-    console.log('aaa')
     cleanUser();
   };
+
+  const handleGetOrder = () => {
+    console.log("isFocused");
+
+    setLoading(true);
+    getOrders(statusSelected)
+      .then((response) => setOrders(response as OrderDTO[]))
+      .catch()
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    console.log(isFocused);
+    if (!isFocused) return;
+    setLoading(true);
+    handleGetOrder();
+  }, [statusSelected, isFocused]);
 
   return (
     <VStack flex={1} safeArea bgColor="gray.600">
@@ -107,16 +110,17 @@ const Home = ({ navigation }: HomeProps) => {
         <FlatList
           px={4}
           data={orders.filter((order) => order.status === statusSelected)}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.uid}
           renderItem={({ item }) => (
             <Order
               data={item}
-              onPress={() => handleNavigationOderDetails(item.id)}
+              onPress={() => handleNavigationOderDetails(item.uid)}
             />
           )}
           contentContainerStyle={{ paddingBottom: 100 }}
           ListEmptyComponent={
             <ListEmpty
+              loading={loading}
               text={
                 statusSelected === "open"
                   ? "Você não possui solicitações\nEm Andamento"

@@ -30,9 +30,6 @@ export type DetailsProps = NativeStackScreenProps<
 
 const { Screen, Navigator } = createNativeStackNavigator<RootStackParamList>();
 
-const { user } = userStore.getState();
-console.log("navigation", user);
-
 const AuthorizedRoutes = (
   <Navigator screenOptions={{ headerShown: false }}>
     <Screen name="Home" component={Home} />

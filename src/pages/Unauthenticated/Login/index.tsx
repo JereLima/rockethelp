@@ -5,7 +5,7 @@ import { Envelope, Key } from "phosphor-react-native";
 import { Logo } from "../../../assets";
 import { Button, Input, Loading } from "../../../components";
 import { UserDTO } from "../../../dtos/User";
-import { auth } from "../../../firestore";
+import { auth, sigIn } from "../../../firestore";
 import { userStore } from "../../../store";
 
 const Login: React.FC = () => {
@@ -16,21 +16,11 @@ const Login: React.FC = () => {
   const { setUser, user } = userStore((state) => state);
 
   const logInWithEmailAndPassword = async () => {
-    setLoading(true);
-    try {
-      const { user } = await signInWithEmailAndPassword(auth, email, password);
-      console.info(user)
-      setUser({
-        displayName: user.displayName,
-        email: user.email,
-        phoneNumber: user.phoneNumber,
-        photoURL: user.photoURL,
-        uid: user.uid,
-      });
-    } catch (err) {
-      console.error(err);
-      alert(err.message);
-    }
+    sigIn()
+      .then((user) => {
+        setUser(user as UserDTO);
+      })
+      .catch();
   };
 
   return (
