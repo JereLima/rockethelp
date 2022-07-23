@@ -15,19 +15,23 @@ const Register: React.FC<RegisterProps> = ({ navigation }) => {
   const handleCreateOrder = () => {
     if (!patrimony || !description) return setWarning(true);
     setLoading(true);
-    createOrder(patrimony, date, description).then(() => navigation.navigate('Home'));
+    createOrder(patrimony, date, description).then(() =>
+      navigation.navigate("Home")
+    );
   };
 
   return (
-    <VStack safeArea bg="gray.600" flex={1}>
-      <VStack w="full" h="full" justifyContent="space-between" p={4}>
-        <VStack bg="gray.600" space={4}>
-          <Header title="Nova Solicitação" />
+    <VStack safeArea bg="gray.700" flex={1}>
+      <Header title="Nova Solicitação" />
+      <VStack space={4} p={4} justifyContent="space-between" flex={1}>
+        <VStack space={4}>
           <Input
-            placeholder="n° do Patrimonio"
+            placeholder="N° do Patrimonio"
             placeholderTextColor="gray.100"
             onChangeText={setPatrimony}
             keyboardType="numeric"
+            bg="gray.600"
+            onFocus={() => setWarning(false)}
           />
           <Input
             placeholder="Descrição do problema"
@@ -36,6 +40,8 @@ const Register: React.FC<RegisterProps> = ({ navigation }) => {
             multiline
             textAlignVertical="top"
             height={250}
+            bg="gray.600"
+            onFocus={() => setWarning(false)}
           />
           {warning && (
             <Text color="red.300" textAlign="center">

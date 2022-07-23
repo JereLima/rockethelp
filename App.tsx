@@ -11,7 +11,7 @@ import {
 
 import { THEME } from "./src/styles/theme";
 import { Loading } from "./src/components";
-import AppRoutes, { AuthorizedRoutes, UnauthorizedRoutes } from "./src/routes";
+import { AuthorizedRoutes, UnauthorizedRoutes } from "./src/routes";
 import { userStore } from "./src/store";
 import { NavigationContainer } from "@react-navigation/native";
 
@@ -28,7 +28,11 @@ export default function App() {
 
   return (
     <NativeBaseProvider theme={THEME}>
-      <StatusBar translucent barStyle="light-content" />
+      <StatusBar
+        translucent
+        barStyle="light-content"
+        backgroundColor="transparent"
+      />
       {fontsLoaded ? (
         <NavigationContainer>
           {user.uid ? AuthorizedRoutes : UnauthorizedRoutes}

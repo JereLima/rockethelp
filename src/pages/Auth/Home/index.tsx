@@ -47,8 +47,8 @@ const Home = ({ navigation }: HomeProps) => {
     navigation.navigate("Register");
   };
 
-  const handleNavigationOderDetails = (orderId: string) => {
-    navigation.navigate("Details", { orderId: orderId });
+  const handleNavigationOderDetails = (order: OrderDTO) => {
+    navigation.navigate("Details", { order: order });
   };
 
   const handleLogout = () => {
@@ -56,8 +56,6 @@ const Home = ({ navigation }: HomeProps) => {
   };
 
   const handleGetOrder = () => {
-    console.log("isFocused");
-
     setLoading(true);
     getOrders(statusSelected)
       .then((response) => setOrders(response as OrderDTO[]))
@@ -114,7 +112,7 @@ const Home = ({ navigation }: HomeProps) => {
           renderItem={({ item }) => (
             <Order
               data={item}
-              onPress={() => handleNavigationOderDetails(item.uid)}
+              onPress={() => handleNavigationOderDetails(item)}
             />
           )}
           contentContainerStyle={{ paddingBottom: 100 }}

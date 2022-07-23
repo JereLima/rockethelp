@@ -19,9 +19,10 @@ const Header = ({ title }: Props) => {
 
   return (
     <HStack
-      bgColor="gray.600"
+      bgColor="gray.700"
       alignItems="center"
       justifyContent="space-between"
+      p={4}
     >
       <IconButton
         h={8}

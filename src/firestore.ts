@@ -11,6 +11,9 @@ import {
   orderBy,
   query,
   where,
+  UpdateData,
+  updateDoc,
+  doc,
 } from "firebase/firestore/lite";
 import { OrderDTO } from "./dtos/Orders";
 
@@ -50,11 +53,21 @@ export const getOrders = async (statusSelected: "open" | "closed" = "open") => {
     const q = query(
       ordersCollection,
       where("status", "==", statusSelected),
-      orderBy('when','asc')
+      orderBy("when", "asc")
     );
+    const data: OrderDTO[] = [];
     const orderSnapshot = await getDocs(ordersCollection);
-    const orderList = orderSnapshot.docs.map((doc) => doc.data());
-    return orderList as OrderDTO[];
+    orderSnapshot.docs.map((doc) =>
+      data.push({
+        description: doc.data().description,
+        patrimony: doc.data().patrimony,
+        status: doc.data().status,
+        solution: doc.data().solution,
+        when: doc.data().when,
+        uid: doc.id,
+      })
+    );
+    return data as OrderDTO[];
   } catch (error) {
     const Error = error as FirebaseError;
     console.log(Error.message);
@@ -73,6 +86,22 @@ export const createOrder = async (
       when,
       status: "open",
     }).then((response) => {
+      console.log(response);
+    });
+  } catch (error) {
+    const Error = error as FirestoreError;
+    console.error("Error adding document: ", Error.message);
+  }
+};
+
+export const updateOrder = async (id: string, solution: string) => {
+  try {
+    const orderRf = doc(db, "orders", id);
+    await updateDoc(orderRf, {
+      status: "closed",
+      solution: solution,
+    }).then((response) => {
+      console.log(response);
     });
   } catch (error) {
     const Error = error as FirestoreError;

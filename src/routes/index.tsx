@@ -9,11 +9,12 @@ import {
 } from "@react-navigation/native-stack";
 import { Details, Home, Login, Register } from "../pages";
 import { userStore } from "../store";
+import { OrderDTO } from "../dtos/Orders";
 
 export type RootStackParamList = {
   Login: undefined;
   Home: undefined;
-  Details: { orderId: string };
+  Details: { order: OrderDTO };
   Register: undefined;
 };
 

@@ -5,11 +5,12 @@ const Input = ({ ...rest }: IInputProps) => {
   const { colors } = useTheme();
   return (
     <NativeBaseInput
-      padding={4}
+      padding={2}
       bg={colors.gray[700]}
       placeholderTextColor={colors.gray[700]}
-      borderWidth={0}
+      borderWidth={1}
       borderRadius="sm"
+      borderColor="gray.400"
       size="md"
       justifyContent="center"
       fontSize="md"
